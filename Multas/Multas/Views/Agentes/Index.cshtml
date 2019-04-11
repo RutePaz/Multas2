@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Multas.Models.Agentes>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Lista de Aagentes</h2>
+
+<p>
+    @Html.ActionLink("Criar novo agente", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+            @**helper que está a interagir com a base de dados -- (quando acaba com "for")
+                helper que mostra o nome do atributo*@
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Esquadra)
+        </th>
+        <th>
+            
+                
+                @Html.DisplayNameFor(model => model.Fotografia)
+           
+         
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    @*item - objeto do tipo de agentes*@
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Esquadra)
+        </td>
+        <td>
+            @*
+                mostra o conteudo do campo fotografia
+                @Html.DisplayFor(modelItem => item.Fotografia)
+            *@
+
+            @*mostrar a imagem do agente*@
+            @*concatnação de um texto que é comum com um dinamico*@
+            <img src="~/imagens/@item.Fotografia"  height="50"/>
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Detalhes", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Remover", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>
