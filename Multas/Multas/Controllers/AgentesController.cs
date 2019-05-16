@@ -43,14 +43,14 @@ namespace Multas.Controllers
 
             }
             //SELECT * FROM Agentes WHERE ID=id
-            Agentes agentes = db.Agentes.Find(id);
+            Agentes agente = db.Agentes.Find(id);
             //o Agente foi encontrado?
-            if (agentes == null)
+            if (agente == null)
             {
-                //O Ãgente não foi encontrado, porque o utilizador está 'à pesca'
+                //O Agente não foi encontrado, porque o utilizador está 'à pesca'
                 return RedirectToAction("Index");
             }
-            return View(agentes);
+            return View(agente);
         }
 
         // GET: Agentes/Create
