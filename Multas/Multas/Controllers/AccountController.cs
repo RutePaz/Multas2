@@ -38,7 +38,8 @@ namespace Multas.Controllers
         //
         // GET: /Account/Login
         [HttpGet]
-        [AllowAnonymous]
+        [AllowAnonymous] //deixa cair a obrigatoriedade de Autenticação 
+        //porque está mais perto do método 
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;

@@ -10,19 +10,52 @@ using System.Web.Mvc;
 using Multas.Models;
 
 namespace Multas.Controllers
+
+
 {
+    [Authorize]//só as pessoas autenticadas podem executar estas tarefas 
     public class AgentesController : Controller
     {
         //cria uma variavel que representa a base de dados
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Agentes
+        //a anotação seguinte obriga a pelo menos um dos Roles 
+        [Authorize(Roles ="RecursosHumanos, Agente")] //só os agentes e as pessoas 
+        //dos recursos humanos acedem a esta listagem
+        //
+        //assim, obrigatoriamente tem de ter os dois roles 
+        //[Authorize(Roles ="Agente")]
+        //[Authorize(Roles ="RecursosHumanos")]
         public ActionResult Index()
         {
             //procura a totalidade dos agente na base de dados 
             //Intrução feita em LINQ
             //SELECT * from Agentes ORDER BY name
             var listaAgentes = db.Agentes.OrderBy(a=>a.Nome).ToList();
+
+            if (!User.IsInRole("RecursosHumanos")) {
+                //o utilizador NÃO pertence aos 'recursos humanos'
+                //preciso de saber o ID do Agente que está autenticado 
+                //como?
+
+                //SELECT FROM Agentes WHERE UserNameId = UserName da pessoa autenticada 
+                int idAgente = db.Agentes
+                    //identificar o agente
+                    .Where(a=>a.UserNameId == User.Identity.Name)
+                    .FirstOrDefault()
+                    .ID;
+
+
+
+
+                return RedirectToAction("Details", new {id=idAgente});
+
+
+
+
+
+            }
             return View(listaAgentes);
         }
 
@@ -51,10 +84,42 @@ namespace Multas.Controllers
                 //O Agente não foi encontrado, porque o utilizador está 'à pesca'
                 return RedirectToAction("Index");
             }
+            //o Agente foi encontrado.
+            //posso mostrar os seus dados a quem os solicitou?
+            //sim, e
+            //  - o utilizador pertence ao role 'recursos humanos' ou
+            //  - o utilizador pertence ao role 'gestão de multas' ou
+            //  -é o utilizador autenticado 
+            if (User.IsInRole("RecursosHumanos") ||
+                    User.IsInRole("GestorMultas") ||
+                    agente.UserNameId == User.Identity.Name
+                    )
+            {
+                //enviar para a View os dados do Agente que foi procurado e encontrado 
+                return View(agente);
+
+
+            }
+            else {
+
+
+
+            }
+
+
+
+
+
+
+
+
+
             return View(agente);
         }
 
         // GET: Agentes/Create
+        //a anotação seguinte obriga a ter o role Recursos Humanos
+        [Authorize(Roles = "RecursosHumanos")]
         public ActionResult Create()
         {
             return View();
@@ -72,6 +137,8 @@ namespace Multas.Controllers
         [HttpPost]
         //anotação para proteger o código de ataques 
         [ValidateAntiForgeryToken]
+        //a anotação seguinte obriga a ter o role Recursos Humanos
+        [Authorize(Roles = "RecursosHumanos")]
         public ActionResult Create([Bind(Include = "Nome,Esquadra")] Agentes agente,
                                           HttpPostedFileBase fotografia)
         {
