@@ -21,9 +21,15 @@ namespace Multas.Migrations
             //*********************************************************************
             // adiciona AGENTES
             var agentes = new List<Agentes> {
-               new Agentes {ID=1, Nome="Tânia Vieira", Esquadra="Ourém", Fotografia="TaniaVieira.jpg" },
-               new Agentes {ID=2, Nome="António Rocha", Esquadra="Ourém", Fotografia="AntonioRocha.jpg" },
-               new Agentes {ID=3, Nome="André Silveira", Esquadra="Abrantes", Fotografia="AndreSilveira.jpg" },
+               new Agentes {
+                   ID =1,
+                   Nome ="Tânia Vieira",
+                   Esquadra ="Ourém",
+                   Fotografia ="TaniaVieira.jpg",
+                   UserNameId = "rhumanos@multas.pt"
+               },
+               new Agentes {ID=2, Nome="António Rocha", Esquadra="Ourém", Fotografia="AntonioRocha.jpg",UserNameId = "" },
+               new Agentes {ID=3, Nome="André Silveira", Esquadra="Abrantes", Fotografia="AndreSilveira.jpg", UserNameId = "agente@multas.pt" },
                new Agentes {ID=4, Nome="Lurdes Vieira", Esquadra="Leiria", Fotografia="LurdesVieira.jpg" },
                new Agentes {ID=5, Nome="Cláudia Pinto", Esquadra="Porto", Fotografia="ClaudiaPinto.jpg" },
                new Agentes {ID=6, Nome="Rui Vieira", Esquadra="Tomar", Fotografia="RuiVieira.jpg" },
